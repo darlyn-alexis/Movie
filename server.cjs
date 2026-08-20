@@ -237,10 +237,11 @@ app.get('/api/stream', async (req, res) => {
 const distPath = path.join(__dirname, 'dist');
 if (fs.existsSync(distPath)) {
     app.use(express.static(distPath));
-    app.get('*', (req, res) => {
-        if (!req.path.startsWith('/api')) {
-            res.sendFile(path.join(distPath, 'index.html'));
+    app.use((req, res, next) => {
+        if (!req.path.startsWith('/api') && req.method === 'GET') {
+            return res.sendFile(path.join(distPath, 'index.html'));
         }
+        next();
     });
 }
 

@@ -18,8 +18,8 @@ const apiClient = axios.create({
     }
 });
 
-// Ruta raíz para confirmar que el servidor está activo
-app.get('/', (req, res) => {
+// Ruta de estado de la API
+app.get('/api/health', (req, res) => {
     res.send('🎬 Servidor de API de CINEMA+ activo. Usa /api para consultas.');
 });
 

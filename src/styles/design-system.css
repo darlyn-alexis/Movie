@@ -541,6 +541,17 @@ button {
 
 /* --- Mobile Responsive Optimizations (< 768px & < 480px) --- */
 @media (max-width: 768px) {
+  .hero-header {
+    min-height: 310px !important;
+    height: auto !important;
+    padding-top: 75px !important;
+    padding-bottom: 1rem !important;
+  }
+
+  .first-home-section {
+    padding-top: 0.2rem !important;
+  }
+
   .hero-title {
     font-size: 1.8rem !important;
     margin: 0.5rem 0 !important;

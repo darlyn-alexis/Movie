@@ -67,7 +67,7 @@ function Home() {
   return (
     <>
       {/* Hero Section */}
-      <header style={{
+      <header className="hero-header" style={{
         position: 'relative',
         minHeight: '440px',
         height: '55vh',
@@ -169,7 +169,7 @@ function Home() {
 
       <main>
         {/* Series Encantadoras Section */}
-        <section style={{ padding: '1rem 0 2rem 0' }}>
+        <section className="first-home-section" style={{ padding: '1rem 0 2rem 0' }}>
           <h3 style={{ marginBottom: '1rem', fontSize: '1.5rem', padding: '0 5%' }}>Series Encantadoras</h3>
           <div className="horizontal-scroll">
             {loading ? (

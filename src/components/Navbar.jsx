@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Menu, User, X, Home, Tv, Film } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -7,6 +7,8 @@ function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showNavbar, setShowNavbar] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -18,6 +20,35 @@ function Navbar() {
 
   const isActive = (path) => location.pathname === path;
 
+  const isDetailView = location.pathname.includes('/pelicula/') || location.pathname.includes('/serie/');
+
+  useEffect(() => {
+    // Reset to visible on page change
+    setShowNavbar(true);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!isDetailView) {
+      setShowNavbar(true);
+      return;
+    }
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        // Scrolling down and past threshold
+        setShowNavbar(false);
+      } else {
+        // Scrolling up or at top
+        setShowNavbar(true);
+      }
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY, isDetailView]);
+
   const handleSearch = (e) => {
     if (e.key === 'Enter' && searchQuery.trim()) {
       navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
@@ -28,7 +59,7 @@ function Navbar() {
 
   return (
     <>
-      <nav className="navbar glass">
+      <nav className={`navbar glass ${!showNavbar ? 'navbar-hidden' : ''}`}>
         <AnimatePresence mode="wait">
           {showSearch ? (
             <motion.div

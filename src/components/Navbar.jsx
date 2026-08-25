@@ -18,26 +18,13 @@ function Navbar() {
 
   const isActive = (path) => location.pathname === path;
 
-  const isDetailPage = location.pathname.startsWith('/pelicula/') || location.pathname.startsWith('/serie/');
-
-  if (isDetailPage) {
-    return (
-      <nav className="navbar navbar-detail glass">
-        <Link to="/" style={{ textDecoration: 'none' }}>
-          <h1 className="nav-logo-text" style={{ 
-            fontSize: '1.35rem', 
-            background: 'var(--accent-gradient)', 
-            WebkitBackgroundClip: 'text', 
-            WebkitTextFillColor: 'transparent',
-            fontWeight: '800',
-            letterSpacing: '1px'
-          }}>
-            CINEMA+
-          </h1>
-        </Link>
-      </nav>
-    );
-  }
+  const handleSearch = (e) => {
+    if (e.key === 'Enter' && searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+      setShowSearch(false);
+      setSearchQuery('');
+    }
+  };
 
   return (
     <>

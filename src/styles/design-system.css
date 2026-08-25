@@ -133,7 +133,17 @@ button {
   }
 
   .navbar {
-    padding: 0.8rem 1rem;
+    top: 12px;
+    left: 4%;
+    right: 4%;
+    width: 92%;
+    padding: 0.65rem 1.2rem;
+    border-radius: 28px;
+    background: rgba(10, 10, 12, 0.85) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
   }
 
   .hero-title {

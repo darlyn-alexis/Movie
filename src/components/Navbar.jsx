@@ -103,14 +103,17 @@ function Navbar() {
             className="glass"
             style={{
               position: 'fixed',
-              top: '60px',
-              left: 0,
-              right: 0,
-              padding: '2rem',
+              top: '68px',
+              left: '4%',
+              right: '4%',
+              width: '92%',
+              padding: '1.5rem',
+              borderRadius: '20px',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
               zIndex: 999,
               display: 'flex',
               flexDirection: 'column',
-              gap: '1.5rem',
+              gap: '1.2rem',
               textAlign: 'center'
             }}
           >

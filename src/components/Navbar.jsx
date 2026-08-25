@@ -29,68 +29,117 @@ function Navbar() {
   return (
     <>
       <nav className="navbar glass">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-          <Link to="/" style={{ textDecoration: 'none' }}>
-            <h1 style={{ 
-              fontSize: '1.8rem', 
-              background: 'var(--accent-gradient)', 
-              WebkitBackgroundClip: 'text', 
-              WebkitTextFillColor: 'transparent',
-              fontWeight: '800'
-            }}>
-              CINEMA+
-            </h1>
-          </Link>
-          <div className="nav-links">
-            {navLinks.map((link) => (
-              <Link 
-                key={link.name} 
-                to={link.path}
-                style={{ color: isActive(link.path) ? 'var(--text-primary)' : 'var(--text-secondary)' }}
-              >
-                {link.name}
-              </Link>
-            ))}
-          </div>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
-          <AnimatePresence>
-            {showSearch && (
-              <motion.input
-                initial={{ width: 0, opacity: 0 }}
-                animate={{ width: 200, opacity: 1 }}
-                exit={{ width: 0, opacity: 0 }}
+        <AnimatePresence mode="wait">
+          {showSearch ? (
+            <motion.div
+              key="search-active"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                width: '100%',
+                gap: '0.8rem'
+              }}
+            >
+              <Search size={20} style={{ color: 'var(--accent-primary)', flexShrink: 0 }} />
+              <input
                 type="text"
-                placeholder="Buscar..."
+                placeholder="Buscar películas, series..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={handleSearch}
                 autoFocus
-                className="glass"
                 style={{
-                  padding: '0.4rem 1rem',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1px solid var(--border-glass)',
+                  flex: 1,
+                  background: 'transparent',
+                  border: 'none',
+                  outline: 'none',
                   color: 'white',
-                  outline: 'none'
+                  fontSize: '0.95rem'
                 }}
               />
-            )}
-          </AnimatePresence>
-          <Search 
-            size={22} 
-            className="text-secondary" 
-            cursor="pointer" 
-            onClick={() => setShowSearch(!showSearch)}
-          />
-          <User size={22} className="text-secondary" cursor="pointer" />
-          <button 
-            className="mobile-menu-btn" 
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X size={26} /> : <Menu size={26} />}
-          </button>
-        </div>
+              {searchQuery && (
+                <X
+                  size={18}
+                  style={{ color: 'var(--text-secondary)', cursor: 'pointer', flexShrink: 0 }}
+                  onClick={() => setSearchQuery('')}
+                />
+              )}
+              <button
+                onClick={() => setShowSearch(false)}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: 'var(--text-secondary)',
+                  cursor: 'pointer',
+                  padding: '4px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <X size={22} />
+              </button>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="navbar-normal"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                width: '100%'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+                <Link to="/" style={{ textDecoration: 'none' }}>
+                  <h1 className="nav-logo-text" style={{ 
+                    fontSize: '1.6rem', 
+                    background: 'var(--accent-gradient)', 
+                    WebkitBackgroundClip: 'text', 
+                    WebkitTextFillColor: 'transparent',
+                    fontWeight: '800'
+                  }}>
+                    CINEMA+
+                  </h1>
+                </Link>
+                <div className="nav-links">
+                  {navLinks.map((link) => (
+                    <Link 
+                      key={link.name} 
+                      to={link.path}
+                      style={{ color: isActive(link.path) ? 'var(--text-primary)' : 'var(--text-secondary)' }}
+                    >
+                      {link.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
+                <Search 
+                  size={22} 
+                  className="text-secondary" 
+                  cursor="pointer" 
+                  onClick={() => setShowSearch(true)}
+                />
+                <User size={22} className="text-secondary" cursor="pointer" />
+                <button 
+                  className="mobile-menu-btn" 
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                >
+                  {isMenuOpen ? <X size={26} /> : <Menu size={26} />}
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* Mobile Menu Overlay */}

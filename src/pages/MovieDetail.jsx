@@ -67,7 +67,7 @@ function MovieDetail() {
   return (
     <div style={{ minHeight: '100vh', paddingBottom: '4rem', backgroundColor: 'var(--bg-main)', color: 'var(--text-primary)' }}>
       {/* Backdrop Hero / Player Section */}
-      <div style={{
+      <div className="detail-hero-header" style={{
         position: 'relative',
         height: '50vh',
         width: '100%',

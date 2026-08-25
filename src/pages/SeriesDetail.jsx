@@ -125,7 +125,7 @@ function SeriesDetail() {
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-main)', color: 'var(--text-primary)', paddingBottom: '5rem' }}>
       
       {/* Backdrop / Player Section */}
-      <div style={{
+      <div className="detail-hero-header" style={{
         position: 'relative',
         height: '45vh',
         width: '100%',

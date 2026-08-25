@@ -539,6 +539,91 @@ button {
   box-shadow: 0 0 15px rgba(229, 9, 20, 0.5);
 }
 
+/* --- Mobile Responsive Optimizations (< 768px & < 480px) --- */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 1.8rem !important;
+    margin: 0.5rem 0 !important;
+    line-height: 1.2 !important;
+  }
+
+  .hero-text {
+    font-size: 0.88rem !important;
+    margin-bottom: 1.2rem !important;
+    -webkit-line-clamp: 2 !important;
+  }
+
+  .carousel-section {
+    padding: 1.2rem 0;
+  }
+
+  .carousel-header {
+    padding: 0 4%;
+    margin-bottom: 0.8rem;
+  }
+
+  .carousel-title {
+    font-size: 1.2rem;
+  }
+
+  .carousel-count-badge {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+  }
+
+  .carousel-track {
+    gap: 0.85rem;
+    padding: 0.4rem 4% 0.8rem 4%;
+  }
+
+  .carousel-card {
+    flex: 0 0 125px;
+    border-radius: var(--radius-sm);
+  }
+
+  .carousel-card-info {
+    padding: 0.55rem;
+  }
+
+  .carousel-card-title {
+    font-size: 0.8rem;
+  }
+
+  .carousel-year, .carousel-type-tag {
+    font-size: 0.68rem;
+  }
+
+  .carousel-arrow {
+    display: none; /* En móviles el scroll táctil es nativo y fluido */
+  }
+
+  .pagination-container {
+    gap: 0.35rem;
+    margin: 2rem 0 1rem 0;
+  }
+
+  .pagination-btn {
+    padding: 0.45rem 0.75rem;
+    font-size: 0.78rem;
+    border-radius: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-card {
+    flex: 0 0 110px;
+  }
+
+  .hero-title {
+    font-size: 1.55rem !important;
+  }
+  
+  main {
+    padding: 0.8rem !important;
+  }
+}
+
+
 
 
 

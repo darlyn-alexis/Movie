@@ -310,10 +310,16 @@ function MovieDetail() {
       <style dangerouslySetInnerHTML={{ __html: `
         @media (max-width: 768px) {
           .movie-poster {
-            display: none !important;
+            width: 140px !important;
+            margin: 0 auto 1.5rem auto !important;
+            display: block !important;
           }
           .glass {
-            padding: 2rem !important;
+            padding: 1.5rem 4% !important;
+            gap: 1.5rem !important;
+          }
+          h1 {
+            font-size: 1.8rem !important;
           }
         }
       `}} />

@@ -127,7 +127,7 @@ function SeriesDetail() {
       {/* Backdrop / Player Section */}
       <div style={{
         position: 'relative',
-        height: '55vh',
+        height: '45vh',
         width: '100%',
         backgroundColor: '#000',
         backgroundImage: selectedEpisode && activeServerUrl ? 'none' : `url(${series.images?.backdrop})`,

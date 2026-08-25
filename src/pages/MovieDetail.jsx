@@ -69,7 +69,7 @@ function MovieDetail() {
       {/* Backdrop Hero / Player Section */}
       <div style={{
         position: 'relative',
-        height: '70vh',
+        height: '55vh',
         width: '100%',
         backgroundColor: '#000',
         backgroundImage: isPlaying ? 'none' : `url(${movie.images?.backdrop})`,

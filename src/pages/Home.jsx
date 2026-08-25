@@ -33,7 +33,18 @@ function Home() {
         ]);
         setMovies(trendingData);
         setEpisodes(recentEpisodes);
-        setHeroMovies(dailyTrending.slice(0, 5));
+        const topHero = dailyTrending.slice(0, 5);
+        setHeroMovies(topHero);
+        
+        // Precargar imágenes del hero en la memoria caché del navegador
+        topHero.forEach((movie) => {
+          const imgUrl = movie.backdrop || movie.poster;
+          if (imgUrl) {
+            const img = new Image();
+            img.src = imgUrl;
+          }
+        });
+
         setEstrenos(estrenosData);
         setSeriesEstrenos(seriesEstrenosData);
         setSeriesTop(seriesTopData);
@@ -47,14 +58,14 @@ function Home() {
     fetchData();
   }, []);
 
-  // Intervalo para cambiar el banner cada 5 segundos
+  // Intervalo para cambiar el banner cada 7 segundos
   useEffect(() => {
     if (heroMovies.length <= 1) return;
-    
+
     const timer = setInterval(() => {
       setCurrentHeroIndex((prev) => (prev + 1) % heroMovies.length);
-    }, 5000);
-    
+    }, 7000);
+
     return () => clearInterval(timer);
   }, [heroMovies]);
 
@@ -77,27 +88,49 @@ function Home() {
         padding: '0 5%',
         overflow: 'hidden'
       }}>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentHero.id || 'default'}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
+        {/* Banners apilados persistentemente en el DOM (cero peticiones adicionales a internet en bucle) */}
+        {heroMovies.length > 0 ? (
+          heroMovies.map((movie, idx) => {
+            const isActive = idx === currentHeroIndex;
+            return (
+              <motion.img
+                key={movie.id || idx}
+                src={movie.backdrop || movie.poster || heroBg}
+                alt={movie.title || 'Banner principal'}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: isActive ? 1 : 0 }}
+                transition={{ duration: 0.9, ease: 'easeInOut' }}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: 'center',
+                  zIndex: isActive ? -1 : -2,
+                  pointerEvents: 'none'
+                }}
+              />
+            );
+          })
+        ) : (
+          <img
+            src={heroBg}
+            alt="Banner por defecto"
             style={{
               position: 'absolute',
               top: 0,
               left: 0,
               width: '100%',
               height: '100%',
-              backgroundImage: `url(${currentHero.backdrop || currentHero.poster || heroBg})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
+              objectFit: 'cover',
+              objectPosition: 'center',
               zIndex: -1
             }}
           />
-        </AnimatePresence>
-        
+        )}
+
         <div style={{
           position: 'absolute',
           top: 0,
@@ -107,17 +140,17 @@ function Home() {
           background: 'linear-gradient(to right, rgba(10,10,12,1) 0%, rgba(10,10,12,0.6) 40%, rgba(10,10,12,0) 100%), linear-gradient(to bottom, transparent 60%, rgba(10,10,12,1) 100%)',
           zIndex: -1
         }} />
-        
-        <motion.div 
+
+        <motion.div
           key={`content-${currentHero.id || 'default'}`}
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
           style={{ maxWidth: '600px' }}
         >
-          <span style={{ 
-            color: 'var(--accent-primary)', 
-            fontWeight: '600', 
+          <span style={{
+            color: 'var(--accent-primary)',
+            fontWeight: '600',
             letterSpacing: '2px',
             fontSize: '0.9rem',
             textTransform: 'uppercase'
@@ -127,9 +160,9 @@ function Home() {
           <h2 className="hero-title" style={{ fontSize: '3.5rem', margin: '1rem 0', lineHeight: '1.1' }}>
             {currentHero.title}
           </h2>
-          <p className="hero-text" style={{ 
-            color: 'var(--text-secondary)', 
-            fontSize: '1.1rem', 
+          <p className="hero-text" style={{
+            color: 'var(--text-secondary)',
+            fontSize: '1.1rem',
             marginBottom: '2rem',
             display: '-webkit-box',
             WebkitLineClamp: 3,
@@ -139,7 +172,7 @@ function Home() {
             {currentHero.overview}
           </p>
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-            <button 
+            <button
               className="btn-primary"
               onClick={() => currentHero.id && navigate(`/${currentHero.type}/${currentHero.id}/${currentHero.slug}`)}
             >
@@ -150,7 +183,7 @@ function Home() {
           {/* Indicadores de Slide */}
           <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.8rem' }}>
             {heroMovies.map((_, idx) => (
-              <div 
+              <div
                 key={idx}
                 onClick={() => setCurrentHeroIndex(idx)}
                 style={{
@@ -170,7 +203,7 @@ function Home() {
       <main>
         {/* Series Encantadoras Section */}
         <section className="first-home-section" style={{ padding: '1rem 0 2rem 0' }}>
-          <h3 style={{ marginBottom: '1rem', fontSize: '1.5rem', padding: '0 5%' }}>Series Encantadoras</h3>
+          <h3 style={{ marginBottom: '1rem', fontSize: '1.5rem', padding: '0 5%' }}>Series</h3>
           <div className="horizontal-scroll">
             {loading ? (
               [1, 2, 3, 4].map((i) => (
@@ -178,7 +211,7 @@ function Home() {
               ))
             ) : (
               seriesEstrenos.map((serie) => (
-                <motion.div 
+                <motion.div
                   key={serie.id}
                   whileHover={{ scale: 1.02 }}
                   onClick={() => navigate(`/serie/${serie.id}/${serie.slug}`)}
@@ -211,22 +244,22 @@ function Home() {
               ))
             ) : (
               estrenos.map((movie) => (
-                <motion.div 
+                <motion.div
                   key={movie.id}
                   whileHover={{ scale: 1.05 }}
                   onClick={() => navigate(`/pelicula/${movie.id}/${movie.slug}`)}
                   className="glass"
-                  style={{ 
+                  style={{
                     flex: '0 0 160px',
-                    aspectRatio: '2/3', 
+                    aspectRatio: '2/3',
                     borderRadius: 'var(--radius-md)',
                     overflow: 'hidden',
                     position: 'relative',
                     cursor: 'pointer'
                   }}
                 >
-                  <img 
-                    src={movie.poster} 
+                  <img
+                    src={movie.poster}
                     alt={movie.title}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     loading="lazy"
@@ -247,14 +280,14 @@ function Home() {
               ))
             ) : (
               episodes.map((ep) => (
-                <motion.div 
+                <motion.div
                   key={`${ep.seriesId}-${ep.season}-${ep.episode}`}
                   whileHover={{ scale: 1.02 }}
                   onClick={() => navigate(`/serie/${ep.seriesId}/${ep.seriesSlug}/temporada/${ep.season}/episodio/${ep.episode}`)}
                   className="episode-card glass"
                 >
-                  <img 
-                    src={ep.image} 
+                  <img
+                    src={ep.image}
                     alt={ep.title}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     loading="lazy"
@@ -283,30 +316,30 @@ function Home() {
               ))
             ) : (
               seriesTop.map((serie) => (
-                <motion.div 
+                <motion.div
                   key={serie.id}
                   whileHover={{ scale: 1.05 }}
                   onClick={() => navigate(`/serie/${serie.id}/${serie.slug}`)}
                   className="glass"
-                  style={{ 
+                  style={{
                     flex: '0 0 160px',
-                    aspectRatio: '2/3', 
+                    aspectRatio: '2/3',
                     borderRadius: 'var(--radius-md)',
                     overflow: 'hidden',
                     position: 'relative',
                     cursor: 'pointer'
                   }}
                 >
-                  <img 
-                    src={serie.poster} 
+                  <img
+                    src={serie.poster}
                     alt={serie.title}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     loading="lazy"
                   />
-                  <div style={{ 
-                    position: 'absolute', 
-                    top: '0.5rem', 
-                    right: '0.5rem', 
+                  <div style={{
+                    position: 'absolute',
+                    top: '0.5rem',
+                    right: '0.5rem',
                     backgroundColor: 'rgba(0,0,0,0.6)',
                     backdropFilter: 'blur(4px)',
                     padding: '2px 6px',
@@ -335,22 +368,22 @@ function Home() {
               ))
             ) : (
               infantil.map((item) => (
-                <motion.div 
+                <motion.div
                   key={item.id}
                   whileHover={{ scale: 1.05 }}
                   onClick={() => navigate(`/${item.type}/${item.id}/${item.slug}`)}
                   className="glass"
-                  style={{ 
+                  style={{
                     flex: '0 0 160px',
-                    aspectRatio: '2/3', 
+                    aspectRatio: '2/3',
                     borderRadius: 'var(--radius-md)',
                     overflow: 'hidden',
                     position: 'relative',
                     cursor: 'pointer'
                   }}
                 >
-                  <img 
-                    src={item.poster} 
+                  <img
+                    src={item.poster}
                     alt={item.title}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     loading="lazy"

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Menu, User, X } from 'lucide-react';
+import { Search, Menu, User, X, Home, Tv, Film } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 function Navbar() {
@@ -11,9 +11,9 @@ function Navbar() {
   const navigate = useNavigate();
 
   const navLinks = [
-    { name: 'Inicio', path: '/' },
-    { name: 'Series', path: '/series' },
-    { name: 'Películas', path: '/movies' },
+    { name: 'Inicio', path: '/', icon: Home },
+    { name: 'Series', path: '/series', icon: Tv },
+    { name: 'Películas', path: '/movies', icon: Film },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -130,6 +130,24 @@ function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Barra de Navegación Inferior (Móviles) */}
+      <nav className="mobile-bottom-nav">
+        {navLinks.map((link) => {
+          const Icon = link.icon;
+          const active = isActive(link.path);
+          return (
+            <Link
+              key={`bottom-${link.name}`}
+              to={link.path}
+              className={`mobile-nav-item ${active ? 'active' : ''}`}
+            >
+              <Icon size={20} />
+              <span>{link.name}</span>
+            </Link>
+          );
+        })}
+      </nav>
     </>
   );
 }

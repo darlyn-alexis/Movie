@@ -573,13 +573,13 @@ button {
   .hero-header {
     min-height: 310px !important;
     height: auto !important;
-    margin-top: 50px !important;
-    padding-top: 1rem !important;
+    margin-top: 10px !important;
+    padding-top: 60px !important;
     padding-bottom: 1rem !important;
   }
 
   .detail-hero-header {
-    margin-top: 50px !important;
+    margin-top: 10px !important;
     padding-top: 0 !important;
   }
 
